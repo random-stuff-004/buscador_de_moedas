@@ -1,6 +1,6 @@
 <div align="center">
   <br>
-  <img src="readme/logo.png" alt="Tanger">
+  <img src="readme/logo.png" alt="DevMenthors">
   <br>
 </div>
 

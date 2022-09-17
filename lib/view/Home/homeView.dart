@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money_search/data/MoneyController.dart';
 import 'package:money_search/model/MoneyModel.dart';
+import 'package:money_search/model/listPersonModel.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -8,62 +9,78 @@ class HomeView extends StatefulWidget {
   @override
   State<HomeView> createState() => _HomeViewState();
 }
+
 /// instancia do modelo para receber as informações
-MoneyModel model = MoneyModel();
+List<ListPersonModel> model = [];
 
 class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Busca de Moedas'),
+          title: Text('Lista de pessoas'),
           centerTitle: true,
           backgroundColor: Colors.lightGreen,
         ),
-        body: SingleChildScrollView(
-          padding: EdgeInsets.all(20),
-          child: RefreshIndicator(
-            onRefresh: (() => refresh()),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                /// metodo de contrução futura para receber dados
-                FutureBuilder<MoneyModel?>(
-                  ///future: local onde informções serão buscadas
-                  future: MoneyController().getMoney(),
-                  builder: (context, snapshot) {
-                    /// validação de carregamento da conexão
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                    /// validação de erro
-                    if (snapshot.error == true) {
-                      return SizedBox(
-                        height: 300,
-                        child: Text("Vazio"),
-                      );
-                    }
-                    /// passando informações para o modelo criado
-                    model = snapshot.data ?? model;
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        /// acessando e exibindo as informações do modelo
-                        Text(model.uSDBRL?.low ?? ""),
-                        Text(model.uSDBRL?.high ?? ""),
-                        ///tambem é possivel exibir as informções atravez do snapshot, porem somente dentro do FutureBuilder!
-                        Text(snapshot.data?.eURBRL?.name ?? ""),
-                        Text(snapshot.data?.eURBRL?.codein ?? ""),
-                      ],
-                    );
-                  },
-                )
-              ],
-            ),
-          ),
+        body: FutureBuilder<List<ListPersonModel>>(
+          future: MoneyController().getListPerson(),
+          builder: (context, snapshot) {
+            /// validação de carregamento da conexão
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+
+            /// validação de erro
+            if (snapshot.error == true) {
+              return SizedBox(
+                height: 300,
+                child: Text("Vazio"),
+              );
+            }
+//  List<ListPersonModel> model = [];
+            /// passando informações para o modelo criado
+            model = snapshot.data ?? model;
+            model.sort(
+              (a, b) => a.name!.compareTo(b.name!),
+            );
+            return ListView.builder(
+                itemCount: model.length,
+                itemBuilder: (context, index) {
+                  ListPersonModel item = model[index];
+                  return ListTile(
+                    leading: Image.network(item.avatar ?? ""),
+                    title: Text(item.name ?? ""),
+                    trailing: Text(item.id ?? ""),
+                  );
+                });
+            // ListView.builder(
+            //   shrinkWrap: true,
+            //   // physics: NeverScrollableScrollPhysics(),
+            //   itemCount: model.length,
+            //   itemBuilder: (BuildContext context, int index) {
+            //     ListPersonModel item = model[index];
+            //     // tap(ListPersonModel item) {
+            //     //   Navigator.push(
+            //     //       context,
+            //     //       MaterialPageRoute(
+            //     //           builder: (context) => Person(
+            //     //                 item: item,
+            //     //               )));
+            //     // }
+
+            //     return GestureDetector(
+            //       // onTap: (() => tap(item)),
+            //       child: ListTile(
+            //         leading: Image.network(item.avatar ?? ""),
+            //         title: Text(item.name ?? ""),
+            //         trailing: Text(item.id ?? ""),
+            //       ),
+            //     );
+            //   },
+            // );
+          },
         ));
   }
 

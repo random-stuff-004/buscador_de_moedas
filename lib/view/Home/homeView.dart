@@ -39,12 +39,38 @@ class _HomeViewState extends State<HomeView> {
                 child: Text("Vazio"),
               );
             }
-//  List<ListPersonModel> model = [];
+            //  List<ListPersonModel> model = [];
             /// passando informações para o modelo criado
             model = snapshot.data ?? model;
             model.sort(
               (a, b) => a.name!.compareTo(b.name!),
             );
+
+            //adicionando uma nova pessoa na lista
+            model.add(ListPersonModel(
+                avatar:
+                    "https://s2.glbimg.com/daMdYJhpxpr5-E78FMlS90olKYw=/0x0:1500x1000/924x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_08fbf48bc0524877943fe86e43087e7a/internal_photos/bs/2022/m/d/anTjJ9RdAtAzpHlf6b0Q/filme-avatar-1.png",
+                name: "Edu.Jr",
+                id: "${model.length + 1}"));
+
+
+            // buscando e removendo avatar
+            model.forEach((element) {
+              if (element.id == '11') {
+                element.avatar = '';
+              }
+            });
+
+            //buscando e alterando o avatar
+            model.forEach((element) {
+              if (element.id == '11') {
+                element.avatar =
+                    'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.dreamstime.com%2Funknown-male-avatar-profile-image-businessman-vector-unknown-male-avatar-profile-image-businessman-vector-profile-image179373829&psig=AOvVaw1ZegF0wzVVa0TTj2GKIgY-&ust=1664115872797000&source=images&cd=vfe&ved=0CAgQjRxqFwoTCPC4otHQrfoCFQAAAAAdAAAAABAI';
+              }
+            });
+
+            model.toSet(); //remove todos itens repetidos
+
             return ListView.builder(
                 itemCount: model.length,
                 itemBuilder: (context, index) {

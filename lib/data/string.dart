@@ -1,0 +1,1 @@
+const String pessoas = "pessoas"; //essa vai ser a key das informações de pessoas.

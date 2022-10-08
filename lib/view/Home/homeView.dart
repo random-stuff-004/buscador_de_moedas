@@ -3,6 +3,8 @@ import 'package:money_search/data/MoneyController.dart';
 import 'package:money_search/model/MoneyModel.dart';
 import 'package:money_search/model/listPersonModel.dart';
 
+import '../../data/internet.dart';
+
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
 
@@ -14,6 +16,19 @@ class HomeView extends StatefulWidget {
 List<ListPersonModel> model = [];
 
 class _HomeViewState extends State<HomeView> {
+  checkConnection() async {
+    internet = await CheckInternet().checkConnection();
+  }
+
+  bool internet = true;
+
+  @override
+  //tudo que for colocado aqui dentro será executado assim que abrir a tela ou seja quando nosso estado for iniciado
+  void initState() {
+    super.initState();
+    checkConnection();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,26 +63,24 @@ class _HomeViewState extends State<HomeView> {
 
             //adicionando uma nova pessoa na lista
             model.add(ListPersonModel(
-                avatar:
-                    "https://s2.glbimg.com/daMdYJhpxpr5-E78FMlS90olKYw=/0x0:1500x1000/924x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_08fbf48bc0524877943fe86e43087e7a/internal_photos/bs/2022/m/d/anTjJ9RdAtAzpHlf6b0Q/filme-avatar-1.png",
+                avatar: "https://avatars.githubusercontent.com/u/78483701?v=4",
                 name: "Edu.Jr",
                 id: "${model.length + 1}"));
 
-
             // buscando e removendo avatar
-            model.forEach((element) {
-              if (element.id == '11') {
-                element.avatar = '';
-              }
-            });
+            // model.forEach((element) {
+            //   if (element.id == '11') {
+            //     element.avatar = '';
+            //   }
+            // });
 
-            //buscando e alterando o avatar
-            model.forEach((element) {
-              if (element.id == '11') {
-                element.avatar =
-                    'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.dreamstime.com%2Funknown-male-avatar-profile-image-businessman-vector-unknown-male-avatar-profile-image-businessman-vector-profile-image179373829&psig=AOvVaw1ZegF0wzVVa0TTj2GKIgY-&ust=1664115872797000&source=images&cd=vfe&ved=0CAgQjRxqFwoTCPC4otHQrfoCFQAAAAAdAAAAABAI';
-              }
-            });
+            // //buscando e alterando o avatar
+            // model.forEach((element) {
+            //   if (element.id == '11') {
+            //     element.avatar =
+            //         'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.dreamstime.com%2Funknown-male-avatar-profile-image-businessman-vector-unknown-male-avatar-profile-image-businessman-vector-profile-image179373829&psig=AOvVaw1ZegF0wzVVa0TTj2GKIgY-&ust=1664115872797000&source=images&cd=vfe&ved=0CAgQjRxqFwoTCPC4otHQrfoCFQAAAAAdAAAAABAI';
+            //   }
+            // });
 
             model.toSet(); //remove todos itens repetidos
 
